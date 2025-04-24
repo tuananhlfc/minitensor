@@ -35,10 +35,10 @@ class Linear(minitensor.Module):
         # 2. Initialize self.bias to be a random parameter of (out_size)
         # 3. Set self.out_size to be out_size
         # HINT: make sure to use the RParam function
+        self.weights = RParam(in_size, out_size)
+        self.bias = RParam(out_size)
+        self.out_size = out_size
 
-        raise NotImplementedError
-
-        # END ASSIGN1_3
 
     def forward(self, x):
         batch, in_size = x.shape
@@ -50,10 +50,11 @@ class Linear(minitensor.Module):
         # 3. Apply Matrix Multiplication on input x and self.weights, and reshape the output to be of size (batch, self.out_size)
         # 4. Add self.bias
         # HINT: You can use the view function of minitensor.tensor for reshape
-
-        raise NotImplementedError
-
-        # END ASSIGN1_3
+        x = x.view(batch, in_size)
+        self.weights = self.weights.value.view(in_size, self.out_size)
+        output = minitensor.MatMul.apply(x, self.weights).view(batch, self.out_size)
+        output = output + self.bias.value
+        return output
 
 
 class Network(minitensor.Module):
