@@ -5,6 +5,9 @@ import embeddings
 
 import sys
 
+from minitensor.tensor import Tensor
+from minitensor.tensor_functions import rand
+
 sys.path.append("../")
 import minitensor
 
@@ -57,6 +60,25 @@ class Linear(minitensor.Module):
         return output
 
 
+def dropout(input: Tensor, rate: float, ignore: bool = False) -> Tensor:
+    """
+    Dropout positions based on random noise.
+
+    Args:
+        input : input tensor
+        rate : probability [0, 1) of dropping out each position
+        ignore : skip dropout, i.e. do nothing at all
+
+    Returns:
+        tensor with random positions dropped out
+    """
+    if ignore:
+        return input
+    r = rand(input.shape, backend=input.backend)
+    drop = rate < r
+    return input * drop
+
+
 class Network(minitensor.Module):
     """
     Implement a MLP for SST-2 sentence sentiment classification.
@@ -83,9 +105,8 @@ class Network(minitensor.Module):
         # BEGIN ASSIGN1_3
         # TODO
         # 1. Construct two linear layers: the first one is embedding_dim * hidden_dim, the second one is hidden_dim * 1
-
-        raise NotImplementedError
-        # END ASSIGN1_3
+        self.embedding_to_hidden = Linear(embedding_dim, hidden_dim)
+        self.hidden_to_output = Linear(hidden_dim, 1)
 
     def forward(self, embeddings):
         """
@@ -100,10 +121,25 @@ class Network(minitensor.Module):
         # 4. Apply the second linear layer
         # 5. Apply sigmoid and reshape to (batch)
         # HINT: You can use minitensor.dropout for dropout, and minitensor.tensor.relu for ReLU
+        batch, sentence_length, embedding_dim = embeddings.shape
 
-        raise NotImplementedError
+        # 1. Average the embeddings on the sentence length dimension
+        averaged_embeddings = embeddings.mean(dim=1).view(batch, embedding_dim)
 
-        # END ASSIGN1_3
+        # 2. Apply the first linear layer
+        hidden = self.embedding_to_hidden(averaged_embeddings)
+
+        # 3. Apply ReLU and dropout
+        hidden = minitensor.ReLU.apply(hidden)
+        hidden = dropout(hidden, self.dropout_prob)
+
+        # 4. Apply the second linear layer
+        output = self.hidden_to_output(hidden)
+
+        # 5. Apply sigmoid and reshape to (batch)
+        output = minitensor.Sigmoid.apply(output).view(batch)
+
+        return output
 
 
 # Evaluation helper methods
