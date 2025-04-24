@@ -132,6 +132,22 @@ def shape_broadcast(shape1: UserShape, shape2: UserShape) -> UserShape:
 
 
 def strides_from_shape(shape: UserShape) -> UserStrides:
+    """
+    Calculate the strides for a given tensor shape.
+    Strides represent the number of steps to move in each dimension of a tensor
+    to access the next element along that dimension. This function computes the
+    strides assuming a row-major (C-style) memory layout.
+    Args:
+        shape (UserShape): A sequence of integers representing the dimensions
+            of the tensor.
+    Returns:
+        UserStrides: A tuple of integers representing the strides for each
+            dimension of the tensor.
+    Example:
+        >>> strides_from_shape((3, 4, 5))
+        (20, 5, 1)
+    """
+
     layout = [1]
     offset = 1
     for s in reversed(shape):
