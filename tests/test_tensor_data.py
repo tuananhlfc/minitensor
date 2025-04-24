@@ -21,14 +21,20 @@ class TestTensorData(unittest.TestCase):
         self.assertEqual(self.tensor.shape, self.shape)
         self.assertEqual(self.tensor.strides, self.strides)
         self.assertEqual(self.tensor.size, 4)
-        self.assertTrue(np.array_equal(self.tensor._storage, np.array(self.storage, dtype=np.float32)))
+        self.assertTrue(
+            np.array_equal(
+                self.tensor._storage, np.array(self.storage, dtype=np.float32)
+            )
+        )
 
-    @parameterized.expand([
-        ((0, 0), 0),
-        ((0, 1), 1),
-        ((1, 0), 2),
-        ((1, 1), 3),
-    ])
+    @parameterized.expand(
+        [
+            ((0, 0), 0),
+            ((0, 1), 1),
+            ((1, 0), 2),
+            ((1, 1), 3),
+        ]
+    )
     def test_index_to_position(self, index, expected_position):
         """Test index-to-position conversion."""
         position = self.tensor.index(index)
@@ -53,7 +59,9 @@ class TestTensorData(unittest.TestCase):
     def test_sample(self):
         """Test sampling a random index."""
         sample_index = self.tensor.sample()
-        self.assertTrue(all(0 <= idx < dim for idx, dim in zip(sample_index, self.shape)))
+        self.assertTrue(
+            all(0 <= idx < dim for idx, dim in zip(sample_index, self.shape))
+        )
 
     def test_permute(self):
         """Test permuting dimensions."""
@@ -61,10 +69,12 @@ class TestTensorData(unittest.TestCase):
         self.assertEqual(permuted_tensor.shape, (2, 2))
         self.assertEqual(permuted_tensor.strides, (1, 2))
 
-    @parameterized.expand([
-        ((2, 1), (1, 3), (2, 3)),
-        ((3, 1, 4), (1, 5, 4), (3, 5, 4)),
-    ])
+    @parameterized.expand(
+        [
+            ((2, 1), (1, 3), (2, 3)),
+            ((3, 1, 4), (1, 5, 4), (3, 5, 4)),
+        ]
+    )
     def test_shape_broadcast(self, shape1, shape2, expected_shape):
         """Test shape broadcasting."""
         broadcasted_shape = TensorData.shape_broadcast(shape1, shape2)

@@ -17,7 +17,9 @@ MAX_DIMS = 32
 
 class IndexingError(RuntimeError):
     "Exception raised for indexing errors."
+
     pass
+
 
 datatype = np.float32
 
@@ -170,6 +172,7 @@ class TensorData:
         shape (UserShape): User-friendly shape of the tensor.
         dims (int): The number of dimensions of the tensor.
     """
+
     _storage: Storage
     _strides: Strides
     _shape: Shape
@@ -236,7 +239,7 @@ class TensorData:
         shape = self.shape
         if len(shape) == 0 and len(aindex) != 0:
             shape = (1,)
-            
+
         # Check for errors
         if aindex.shape[0] != len(self.shape):
             raise IndexingError(f"Index {aindex} must be size of {self.shape}.")
@@ -279,9 +282,9 @@ class TensorData:
         Returns:
             New `TensorData` with the same storage and a new dimension order.
         """
-        assert list(sorted(order)) == list(
-            range(len(self.shape))
-        ), f"Must give a position to each dimension. Shape: {self.shape} Order: {order}"
+        assert list(sorted(order)) == list(range(len(self.shape))), (
+            f"Must give a position to each dimension. Shape: {self.shape} Order: {order}"
+        )
 
         return TensorData(
             self._storage,
