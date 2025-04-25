@@ -17,3 +17,6 @@
 - [ ] Pre-trained model support
 - [ ] Custom layer creation
 - [ ] Improved documentation and tutorials
+
+## Known issues
+* [test_cuda_matmul_transpose](https://github.com/tuananhlfc/minitensor/issues/1)
