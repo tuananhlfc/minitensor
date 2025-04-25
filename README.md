@@ -2,21 +2,35 @@
 
 ## Features
 - [x] Automatic differentiation
-- [x] Basic tensor operations
+- [ ] Basic tensor operations:
+    - [x] Element-wise addition
+    - [x] Element-wise multiplication
+    - [x] Matrix multiplication
+    - [ ] Broadcasting
+    - [ ] Advanced indexing
+    - [ ] Sparse tensor support
 - [x] Neural network module support
 - [x] Optimizers (e.g., SGD)
 - [x] Loss functions (e.g., MSE, Cross-Entropy)
-- [ ] Convolutional layers
+- [ ] Decoder-only Transformer Model
+    - [ ] Softmax loss function
+    - [ ] MultiHeadAttention
+    - [ ] FeedForward
+    - [ ] DecoderLM
+    - [ ] Move softmax and LayerNorm backward to CUDA for optimization
+- [ ] Distributed training support
+    - [ ] Data Parallel
+    - [ ] Pipeline Parallel
+
+## Future features consideration
 - [ ] GPU acceleration
 - [ ] Advanced optimizers (e.g., Adam)
 - [ ] Support for recurrent neural networks
 - [ ] Model serialization and loading
 - [ ] Visualization tools for training progress
 - [ ] Integration with external datasets
-- [ ] Distributed training support
 - [ ] Pre-trained model support
 - [ ] Custom layer creation
-- [ ] Improved documentation and tutorials
 
 ## Known issues
 * [test_cuda_matmul_transpose](https://github.com/tuananhlfc/minitensor/issues/1)
